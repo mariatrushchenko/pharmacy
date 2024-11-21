@@ -1,22 +1,29 @@
 package ua.com.reactive.pharmacy.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ua.com.reactive.pharmacy.entity.Customer;
+import ua.com.reactive.pharmacy.service.CustomerService;
 
 @RestController
+@RequestMapping("/customers")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+
 public class CustomerController {
-    @GetMapping("/customers")
+    private final CustomerService customerService;
 
-    public Flux<Customer> getCustomers() {
-        Flux<Customer> customers = Flux.just(
-                        new Customer(1L, "Alice", "Smith", "+3800959205720", "1111", "1111"),
-                        new Customer(2L, "Bob", "Johnson", "+380689304829", "2222", "2222")
-                )
-                .skip(0)
-                .take(2);
+    @GetMapping
+    public Flux<Customer> list(
+            @RequestParam(defaultValue = "0") Long start,
+            @RequestParam(defaultValue = "3") Long count) {
+        return customerService.list();
+    }
 
-        return customers;
+    @PostMapping
+    public Mono<Customer> create(@RequestBody Customer customer) {
+        return customerService.addOne(customer);
     }
 }

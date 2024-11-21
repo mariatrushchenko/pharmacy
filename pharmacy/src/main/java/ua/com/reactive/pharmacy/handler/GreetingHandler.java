@@ -27,7 +27,7 @@ public class GreetingHandler {
                 .body(BodyInserters.fromValue("Main page!"));
     }
 
-    public Mono<ServerResponse> getCustomers(ServerRequest request) {
+    public Mono<ServerResponse> getUsers(ServerRequest request) {
 
         String start = request
                 .queryParam("start")

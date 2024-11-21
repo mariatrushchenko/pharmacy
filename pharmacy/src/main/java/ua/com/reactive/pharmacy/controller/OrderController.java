@@ -1,22 +1,29 @@
 package ua.com.reactive.pharmacy.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ua.com.reactive.pharmacy.entity.Order;
+import ua.com.reactive.pharmacy.service.OrderService;
 
 @RestController
+@RequestMapping("/orders")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+
 public class OrderController {
-    @GetMapping("/orders")
+    private final OrderService orderService;
 
-    public Flux<Order> getOrders() {
-        Flux<Order> orders = Flux.just(
-                        new Order(1L, 1L, 1L, "2024-11-20"),
-                        new Order(2L, 2L, 2L, "2024-11-21")
-                )
-                .skip(0)
-                .take(2);
+    @GetMapping
+    public Flux<Order> list(
+            @RequestParam(defaultValue = "0") Long start,
+            @RequestParam(defaultValue = "3") Long count) {
+        return orderService.list();
+    }
 
-        return orders;
+    @PostMapping
+    public Mono<Order> create(@RequestBody Order order) {
+        return orderService.addOne(order);
     }
 }

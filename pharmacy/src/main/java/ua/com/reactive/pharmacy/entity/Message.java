@@ -12,17 +12,13 @@ import org.springframework.data.relational.core.mapping.Table;
 @ToString
 @Builder
 
-@Table(name = "medicines")
-public class Medicine {
+@Table(name = "message")
+public class Message {
     @Id
     private Long id;
-    private String name;
-    private String price;
-    private String quantity;
+    private String data;
 
-    public Medicine(String name, String price, String quantity) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
+    public Message(String data) {
+        this.data = data;
     }
 }
