@@ -12,10 +12,12 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class GreetingRouter {
     @Bean
     public RouterFunction<ServerResponse> route(GreetingHandler greetingHandler) {
-
+        RequestPredicate accept = accept(MediaType.APPLICATION_JSON);
         return RouterFunctions
                 .route(RequestPredicates.GET("/hello").and(accept(MediaType.APPLICATION_JSON)), greetingHandler::hello)
                 .andRoute(RequestPredicates.GET("/"), greetingHandler::home)
-                .andRoute(RequestPredicates.GET("/users"), greetingHandler::getUsers);
+                .andRoute(RequestPredicates.GET("/users").and(accept), greetingHandler::users)
+                .andRoute(RequestPredicates.GET("/admin"), greetingHandler::admin)
+                .andRoute(RequestPredicates.GET("/registration"), greetingHandler::registration);
     }
 }

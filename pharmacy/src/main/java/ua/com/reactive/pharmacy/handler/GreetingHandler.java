@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ua.com.reactive.pharmacy.entity.Customer;
+import ua.com.reactive.pharmacy.entity.User;
 import ua.com.reactive.pharmacy.entity.Greeting;
 
 @Component
@@ -27,23 +27,27 @@ public class GreetingHandler {
                 .body(BodyInserters.fromValue("Main page!"));
     }
 
-    public Mono<ServerResponse> getUsers(ServerRequest request) {
+    public Mono<ServerResponse> users(ServerRequest request){
+        return ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue("User Page"));
+    }
 
-        String start = request
-                .queryParam("start")
-                .orElse("0");
+    public Mono<ServerResponse> admin(ServerRequest request) {
 
-
-        Flux<Customer> customers = Flux.just(
-                new Customer(1L, "Alice", "Smith", "+3800959205720", "1111", "1111"),
-                new Customer(2L, "Bob", "Johnson", "+380689304829", "2222", "2222")
-        )
-                .skip(Long.valueOf(start))
-                .take(2);
+        Flux<User> users = Flux.
+                just(
+                        new User("Alice", "Smith", "+3800959205720", "1111", "1111"),
+                        new User("Bob", "Johnson", "+380689304829", "2222", "2222")
+                );
 
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(customers, Customer.class);
+                .body(users, User.class);
+    }
+    public Mono<ServerResponse> registration (ServerRequest request) {
+        return ServerResponse.ok().render("registration");
     }
 }

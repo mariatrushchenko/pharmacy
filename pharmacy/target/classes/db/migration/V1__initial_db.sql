@@ -23,7 +23,7 @@ CREATE TABLE orders (
 
 ALTER TABLE orders
     ADD CONSTRAINT fk_customer_id
-        FOREIGN KEY (customer_id) REFERENCES customers(id);
+        FOREIGN KEY (customer_id) REFERENCES users(id);
 
 ALTER TABLE orders
     ADD CONSTRAINT fk_medicine_id
